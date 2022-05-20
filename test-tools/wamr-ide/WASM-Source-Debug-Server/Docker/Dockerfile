@@ -8,12 +8,13 @@ WORKDIR /root/
 COPY resource /root/
 
 ##  - download cmake with wget and set up
-RUN wget https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1-linux-x86_64.tar.gz \
-    && tar -zxvf cmake-3.21.1-linux-x86_64.tar.gz \
-    && rm -f cmake-3.21.1-linux-x86_64.tar.gz \
-    && mv cmake-3.21.1-linux-x86_64 /opt/cmake \
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.23.1/cmake-3.23.1-linux-aarch64.tar.gz \
+    && tar -zxvf cmake-3.23.1-linux-aarch64.tar.gz \
+    && rm -f cmake-3.23.1-linux-aarch64.tar.gz \
+    && mv cmake-3.23.1-linux-aarch64 /opt/cmake \
     && ln -s /opt/cmake/bin/cmake /bin/cmake \
-    && apt-get install make
+    && apt-get install make \
+    && cmake --help
 
 ##  -clone wamr-repo and build iwasm
 RUN git clone -b main --depth=1 https://github.com/bytecodealliance/wasm-micro-runtime.git \
@@ -28,5 +29,7 @@ FROM ubuntu:20.04
 COPY --from=BASE /root/iwasm /root
 COPY --from=BASE /root/debug.sh /root
 COPY --from=BASE /root/run.sh /root
+
+RUN chmod +x /root/run.sh
 
 WORKDIR /root/

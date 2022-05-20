@@ -35,7 +35,7 @@ export class WasmTaskProvider implements vscode.TaskProvider {
         let targetName =
             TargetConfigPanel.BUILD_ARGS.output_file_name.split('.')[0];
 
-        if (os.platform() === 'linux') {
+        if (1) {
             /* build */
             this.buildShellOption = {
                 cmd: 'bash',

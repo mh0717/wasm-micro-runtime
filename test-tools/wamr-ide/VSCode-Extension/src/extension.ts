@@ -43,7 +43,7 @@ export async function activate(context: vscode.ExtensionContext) {
     /**
      * Get OS platform information for differ windows and linux execution script
      */
-    OS_PLATFORM = os.platform();
+    OS_PLATFORM = 'linux';
 
     /**
      * Provide Build & Run Task with Task Provider instead of "tasks.json"

@@ -4,9 +4,6 @@
 #!/bin/bash
 target_name=$1
 
-docker run -it --name=wasm-debug-server-ctr \
-           -v $(pwd):/mnt \
-           wasm-debug-server:1.0 \
-           /bin/bash -c "./run.sh ${target_name}"
+docker run -it --name=wasm-debug-server-ctr -v $(pwd):/mnt wasm-debug-server:1.0 /bin/bash ./run.sh ${target_name}
 
 docker stop wasm-debug-server-ctr && docker rm wasm-debug-server-ctr

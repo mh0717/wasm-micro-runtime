@@ -3,7 +3,9 @@
     "publisher": "wamr",
     "displayName": "WAMR-IDE",
     "description": "An Integrated Development Environment for WASM",
+    "repositoryURL": "https://www.github.com/hui/hui",
     "version": "0.0.1",
+    "repository": "https://github.com/yhatt/vsce-yarn-lacked-dependency",
     "engines": {
         "vscode": "^1.59.0"
     },
@@ -233,6 +235,7 @@
         "vscode-test": "^1.5.2"
     },
     "dependencies": {
-        "@vscode/webview-ui-toolkit": "^0.8.4"
+        "@vscode/webview-ui-toolkit": "^0.8.4",
+        "vsce": "^2.8.0"
     }
 }

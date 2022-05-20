@@ -15,26 +15,37 @@ COPY resource /root/
 #    - wamr-sdk
 
 ##  - download cmake with wget and set up
-RUN wget https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1-linux-x86_64.tar.gz \
-    && tar -zxvf cmake-3.21.1-linux-x86_64.tar.gz \
-    && rm -f cmake-3.21.1-linux-x86_64.tar.gz \
-    && mv cmake-3.21.1-linux-x86_64 /opt/cmake \
+# RUN wget https://github.com/Kitware/CMake/releases/download/v3.23.1/cmake-3.23.1-macos-universal.tar.gz \
+#     && tar -zxvf cmake-3.23.1-macos-universal.tar.gz \
+#     && rm -f cmake-3.23.1-macos-universal.tar.gz \
+#     && mv cmake-3.23.1-macos-universal /opt/cmake \
+#     && ln -s /opt/cmake/bin/cmake /bin/cmake \
+#     && apt-get install make
+
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.23.1/cmake-3.23.1-linux-aarch64.tar.gz \
+    && tar -zxvf cmake-3.23.1-linux-aarch64.tar.gz \
+    && rm -f cmake-3.23.1-linux-aarch64.tar.gz \
+    && mv cmake-3.23.1-linux-aarch64 /opt/cmake \
     && ln -s /opt/cmake/bin/cmake /bin/cmake \
-    && apt-get install make
+    && apt-get install make \
+    && cmake --help
 
 ##  - download wasi-sdk with wget and set up to /opt/wasi-sdk
-RUN wget https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-12/wasi-sdk-12.0-linux.tar.gz \
-    && tar -zxvf wasi-sdk-12.0-linux.tar.gz \
-    && rm -f wasi-sdk-12.0-linux.tar.gz
+# RUN wget https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-15/wasi-sdk-15.0-macos.tar.gz \
+#     && tar -zxvf wasi-sdk-15.0-macos.tar.gz \
+#     && rm -f wasi-sdk-15.0-macos.tar.gz
+RUN wget https://github.com/mh0717/myimages/releases/download/v0.3/wasi-sdk.tar.gz \
+    && tar -zxvf wasi-sdk.tar.gz \
+    && rm -f wasi-sdk.tar.gz
 
 RUN git clone -b main --depth=1 https://github.com/bytecodealliance/wasm-micro-runtime.git \
     && cd /root/wasm-micro-runtime/wamr-compiler \
-    && ./build_llvm.sh \
+    && ./build_llvm.sh --arch AArch64 --project clang --platform darwin \
     #  - build wamrc
     && cd /root/wasm-micro-runtime/wamr-compiler \
     && mkdir build \
     && cd build \
-    && cmake .. \
+    && cmake -DWAMR_BUILD_TARGET=AArch64 .. \
     && make \
     #  - copy the wamrc to /root
     && cp /root/wasm-micro-runtime/wamr-compiler/build/wamrc /root/wamrc \
@@ -52,9 +63,11 @@ RUN mkdir -p /opt/wasi-sdk \
 # COPY files from BASE image
 COPY --from=BASE /opt/cmake/ /opt/cmake/
 COPY --from=BASE /opt/wamr-sdk/app/ /opt/wamr-sdk/app/
-COPY --from=BASE /root/wasi-sdk-12.0/ /opt/wasi-sdk/
+COPY --from=BASE /root/wasi-sdk/ /opt/wasi-sdk/
 COPY --from=BASE /root/wamrc /root
 COPY --from=BASE /root/build_wasm.sh /root
+
+RUN chmod +x /root/build_wasm.sh
 
 RUN ln -s /opt/cmake/bin/cmake /usr/bin/cmake \
  && ln -s /root/wamrc /usr/bin/wamrc

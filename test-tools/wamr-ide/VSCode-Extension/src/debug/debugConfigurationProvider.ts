@@ -45,12 +45,13 @@ export class WasmDebugConfigurationProvider
                 ],
                 ['sourceMap']: [['/mnt', hostPath]],
             };
-        } else if (os.platform() === 'linux') {
+        } else {
             this.wasmDebugConfig = {
                 type: 'wamr-debug',
                 name: 'Attach',
                 request: 'attach',
                 ['stopOnEntry']: true,
+                ['initCommands']: ['platform select remote-linux'],
                 ['attachCommands']: [
                     'process connect -p wasm connect://127.0.0.1:' + port + '',
                 ],
