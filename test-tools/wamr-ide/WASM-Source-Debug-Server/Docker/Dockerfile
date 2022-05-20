@@ -20,7 +20,7 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.23.1/cmake-3.23.1
 RUN git clone -b main --depth=1 https://github.com/bytecodealliance/wasm-micro-runtime.git \
     && cd /root/wasm-micro-runtime/product-mini/platforms/linux \
     && mkdir build && cd build \
-    && cmake .. -DWAMR_BUILD_DEBUG_INTERP=1 && make \
+    && cmake .. -DWAMR_BUILD_DEBUG_INTERP=1 -DWAMR_BUILD_AOT=0 -DWAMR_BUILD_MULTI_MODULE=1 -DWAMR_BUILD_SHARED_MEMORY=1 -DWAMR_BUILD_BULK_MEMORY=1 -DWAMR_BUILD_THREAD_MGR=1 -DWAMR_BUILD_LIB_PTHREAD=1 -DWAMR_BUILD_SIMD=0 -DCMAKE_C_FLAGS="-DAPP_THREAD_STACK_SIZE_MIN=131072 -DAPP_THREAD_STACK_SIZE_DEFAULT=131072" && make \
     && cp /root/wasm-micro-runtime/product-mini/platforms/linux/build/iwasm /root/iwasm \
     && rm -fr /root/wasm-micro-runtime
 
